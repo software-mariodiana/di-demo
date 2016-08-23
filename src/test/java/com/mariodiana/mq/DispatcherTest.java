@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mariodiana.mq;
 
 import org.junit.After;
@@ -16,10 +11,6 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author mario
- */
 public class DispatcherTest {
     private SendQueue _sendQueue = null;
     
@@ -52,5 +43,13 @@ public class DispatcherTest {
         processed.add(mock);
         Dispatcher.INSTANCE.pickupProcessedMessages(processed);
         assertTrue(Dispatcher.INSTANCE.getMessageIds().isEmpty());
+    }
+    
+    @Test
+    public void messageShouldBeSentToQueue() {
+        Message mock = mock(Message.class);
+        when(mock.getId()).thenReturn("42");
+        Dispatcher.INSTANCE.sendMessageForProcessing(mock);
+        verify(_sendQueue, times(1)).send(mock);
     }
 }
